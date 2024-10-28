@@ -63,75 +63,79 @@ function App() {
                 style: {
                   color: "#ffffff",
                   paddingBottom: 12,
-                  fontSize: 18,
+                  // fontSize: 18,
                   fontWeight: 200,
                 },
                 disableUnderline: true,
               },
             }}
-            sx={{}}
           />
         </div>
 
-        <div className="todo-items-container">
-          <List
-            sx={{
-              width: "100%",
-              bgcolor: "#2f283e",
-            }}
-          >
-            {[0, 1, 2, 3, 4, 5, 6].map((value) => {
-              const labelId = `checkbox-list-label-${value}`;
+        <div>
+          <div className="todo-items-container">
+            <List
+              sx={{
+                width: "100%",
+                bgcolor: "#2f283e",
+              }}
+            >
+              {[0, 1, 2, 3, 4, 5, 6].map((value) => {
+                const labelId = `checkbox-list-label-${value}`;
 
-              return (
-                <ListItem
-                  key={value}
-                  sx={{
-                    borderLeft: 0,
-                    borderRight: 0,
-                    borderTop: 0,
-                    borderBottom: 1,
-                    borderColor: "#a29d9d",
-                    borderStyle: "solid",
-                  }}
-                >
-                  <ListItemButton
-                    role={undefined}
-                    onClick={handleToggle(value)}
-                    dense
+                return (
+                  <ListItem
+                    key={value}
+                    sx={{
+                      borderLeft: 0,
+                      borderRight: 0,
+                      borderTop: 0,
+                      borderBottom: 1,
+                      borderColor: "#a29d9d",
+                      borderStyle: "solid",
+                    }}
                   >
-                    <ListItemIcon>
-                      <Checkbox
-                        icon={
-                          <RadioButtonUncheckedIcon sx={{ color: "#ffffff" }} />
-                        }
-                        checkedIcon={
-                          <CheckIcon
-                            sx={{
-                              background: "linear-gradient( #3f5efb, #fc466b)",
-                              color: "#ffffff",
-                              borderRadius: 100,
-                            }}
-                          />
-                        }
-                        edge="start"
-                        checked={checked.includes(value)}
-                        tabIndex={-1}
-                        disableRipple
-                        inputProps={{ "aria-labelledby": labelId }}
+                    <ListItemButton
+                      role={undefined}
+                      onClick={handleToggle(value)}
+                      dense
+                    >
+                      <ListItemIcon>
+                        <Checkbox
+                          icon={
+                            <RadioButtonUncheckedIcon
+                              sx={{ color: "#ffffff" }}
+                            />
+                          }
+                          checkedIcon={
+                            <CheckIcon
+                              sx={{
+                                background:
+                                  "linear-gradient( #3f5efb, #fc466b)",
+                                color: "#ffffff",
+                                borderRadius: 100,
+                              }}
+                            />
+                          }
+                          edge="start"
+                          checked={checked.includes(value)}
+                          tabIndex={-1}
+                          disableRipple
+                          inputProps={{ "aria-labelledby": labelId }}
+                        />
+                      </ListItemIcon>
+                      <ListItemText
+                        id={labelId}
+                        primary={`Line item ${value + 1}`}
+                        // primaryTypographyProps={{ fontSize: 18 }}
                       />
-                    </ListItemIcon>
-                    <ListItemText
-                      id={labelId}
-                      primary={`Line item ${value + 1}`}
-                      primaryTypographyProps={{ fontSize: 18 }}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              );
-            })}
-          </List>
-          <div className="bottom-actions-bar px-2">
+                    </ListItemButton>
+                  </ListItem>
+                );
+              })}
+            </List>
+          </div>
+          <div className="bottom-actions-bar-desktop ">
             <h3>5 items left</h3>
             <div className="bottom-navigation">
               <h3>All</h3>
@@ -139,6 +143,17 @@ function App() {
               <h3>Completed</h3>
             </div>
             <h3>Clear Completed</h3>
+          </div>
+          <div className="bottom-actions-bar-mobile px-2">
+            <div className="bottom-actions ">
+              <h3>5 items left</h3>
+              <h3>Clear Completed</h3>
+            </div>
+            <div className="bottom-navigation">
+              <h3>All</h3>
+              <h3>Active</h3>
+              <h3>Completed</h3>
+            </div>
           </div>
         </div>
       </div>
