@@ -6,12 +6,11 @@ export function TodoInput({ addTodo }: any) {
   const [inputValue, setInputValue] = useState<string>("");
 
   function onChangeTextValue(event: any) {
-    console.log("input value : ", event.target.value);
     setInputValue(event.target.value);
   }
 
   function handleAddNewTodo() {
-    addTodo({ todoItem: inputValue, isComplete: false });
+    addTodo({ id: Math.random(), todoItem: inputValue, isComplete: false });
     setInputValue("");
   }
 

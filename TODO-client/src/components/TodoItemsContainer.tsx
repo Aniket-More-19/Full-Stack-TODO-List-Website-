@@ -11,21 +11,20 @@ import { useEffect, useState } from "react";
 
 export function TodoItemsContainer({
   todos,
-  // setTodos,
-  // setFilterValue,
   filterValue,
   checked,
   setChecked,
 }: any) {
-  const [todosArray, setTodosArray] = useState<Array<object>>(todos);
-  console.log("todos", todos);
+  const [todosArray, setTodosArray] =
+    useState<Array<{ id: number; todoItem: string; isComplete: boolean }>>(
+      todos
+    );
 
   useEffect(() => {
     let updatedTodos;
 
     if (filterValue === "All") {
       setTodosArray(todos);
-      console.log("in all");
     } else if (filterValue === "Active") {
       updatedTodos = todos.filter((todo: any) => !todo.isComplete);
       setTodosArray(updatedTodos);
@@ -35,17 +34,20 @@ export function TodoItemsContainer({
     }
   }, [filterValue, todos]);
 
-  function handleToggle(todo: { todoItem: string; isComplete: boolean }) {
-    console.log("obj", todo);
+  console.log("todos", todos);
 
+  function handleToggle(todo: {
+    id: number;
+    todoItem: string;
+    isComplete: boolean;
+  }) {
     const newChecked = [...checked];
-    console.log("newChecked : ", newChecked);
-    if (newChecked.includes(todo.todoItem)) {
-      const index = checked.indexOf(todo.todoItem);
+    if (newChecked.includes(todo.id)) {
+      const index = checked.indexOf(todo.id);
       newChecked.splice(index, 1);
       todo.isComplete = false;
     } else {
-      newChecked.push(todo.todoItem);
+      newChecked.push(todo.id);
       todo.isComplete = true;
     }
     setChecked(newChecked);
@@ -69,57 +71,54 @@ export function TodoItemsContainer({
             </h3>
           </div>
         ) : (
-          todosArray.map((todo: any) => {
-            const labelId = `checkbox-list-label-${todo.todoItem}`;
+          todosArray.map(
+            (todo: { id: number; todoItem: string; isComplete: boolean }) => {
+              const labelId = `checkbox-list-label-${todo.todoItem}`;
 
-            return (
-              <ListItem
-                key={todo.todoItem}
-                sx={{
-                  borderLeft: 0,
-                  borderRight: 0,
-                  borderTop: 0,
-                  borderBottom: 1,
-                  borderColor: "#a29d9d",
-                  borderStyle: "solid",
-                }}
-              >
-                <ListItemButton
-                  role={undefined}
-                  onClick={() => handleToggle(todo)}
-                  dense
+              return (
+                <ListItem
+                  key={todo.id}
+                  sx={{
+                    borderLeft: 0,
+                    borderRight: 0,
+                    borderTop: 0,
+                    borderBottom: 1,
+                    borderColor: "#a29d9d",
+                    borderStyle: "solid",
+                  }}
                 >
-                  <ListItemIcon>
-                    <Checkbox
-                      icon={
-                        <RadioButtonUncheckedIcon sx={{ color: "#ffffff" }} />
-                      }
-                      checkedIcon={
-                        <CheckIcon
-                          sx={{
-                            background: "linear-gradient( #3f5efb, #fc466b)",
-                            color: "#ffffff",
-                            borderRadius: 100,
-                          }}
-                        />
-                      }
-                      edge="start"
-                      checked={checked.includes(todo.todoItem)}
-                      tabIndex={-1}
-                      disableRipple
-                      inputProps={{ "aria-labelledby": labelId }}
-                    />
-                  </ListItemIcon>
-                  <ListItemText
-                    id={labelId}
-                    // primary={`Line item ${value + 1}`}
-                    primary={`${todo.todoItem}`}
-                    // primaryTypographyProps={{ fontSize: 18 }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            );
-          })
+                  <ListItemButton
+                    role={undefined}
+                    onClick={() => handleToggle(todo)}
+                    dense
+                  >
+                    <ListItemIcon>
+                      <Checkbox
+                        icon={
+                          <RadioButtonUncheckedIcon sx={{ color: "#ffffff" }} />
+                        }
+                        checkedIcon={
+                          <CheckIcon
+                            sx={{
+                              background: "linear-gradient( #3f5efb, #fc466b)",
+                              color: "#ffffff",
+                              borderRadius: 100,
+                            }}
+                          />
+                        }
+                        edge="start"
+                        checked={checked.includes(todo.id)}
+                        tabIndex={-1}
+                        disableRipple
+                        inputProps={{ "aria-labelledby": labelId }}
+                      />
+                    </ListItemIcon>
+                    <ListItemText id={labelId} primary={`${todo.todoItem}`} />
+                  </ListItemButton>
+                </ListItem>
+              );
+            }
+          )
         )}
       </List>
     </div>

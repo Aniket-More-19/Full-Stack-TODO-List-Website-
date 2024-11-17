@@ -6,10 +6,7 @@ export function BottomBar({
   checked,
   setChecked,
 }: any) {
-  console.log("filtervalue ", filterValue);
-
   function handleFilterValue(value: string) {
-    console.log("filter : ", value);
     setFilterValue(value);
   }
 
@@ -30,7 +27,15 @@ export function BottomBar({
     <>
       {/** bottom bar for desktop */}
       <div className="bottom-actions-bar-desktop ">
-        <h3>{todos.length} items left</h3>
+        <h3>
+          {
+            todos.filter(
+              (todo: { todoItem: string; isComplete: boolean }) =>
+                !todo.isComplete
+            ).length
+          }{" "}
+          items left
+        </h3>
         <div className="bottom-navigation">
           <h3
             className={filterValue === "All" ? "blue-nav" : ""}
@@ -64,7 +69,15 @@ export function BottomBar({
       {/** bottom bar for mobile */}
       <div className="bottom-actions-bar-mobile px-2">
         <div className="bottom-actions">
-          <h3>{todos.length} items left</h3>
+          <h3>
+            {
+              todos.filter(
+                (todo: { todoItem: string; isComplete: boolean }) =>
+                  !todo.isComplete
+              ).length
+            }{" "}
+            items left
+          </h3>{" "}
           <h3 onClick={() => handleFilterValue("Clear Completed")}>
             Clear Completed
           </h3>
