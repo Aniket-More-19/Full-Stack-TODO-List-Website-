@@ -5,9 +5,9 @@ const Todo = require("../models/todo");
 
 // create a new Todo
 router.post("/", (req, res) => {
-  const { id, text, isComplete } = req.body;
-  const sql = "INSERT INTO todos (id, text, isComplete) VALUES(?, ?, ?)";
-  db.run(sql, [id, text, isComplete], (err) => {
+  const { id, todoItem, isComplete } = req.body;
+  const sql = "INSERT INTO todos (id, todoItem, isComplete) VALUES(?, ?, ?)";
+  db.run(sql, [id, todoItem, isComplete], (err) => {
     if (err) {
       res.status(500).json({ error: err.message });
     } else {
@@ -24,7 +24,7 @@ router.get("/", (req, res) => {
       res.status(500).json({ error: err.message });
     } else {
       const todos = rows.map(
-        (row) => new Todo(row.id, row.text, row.isComplete)
+        (row) => new Todo(row.id, row.todoItem, row.isComplete)
       );
       res.json(todos);
     }
