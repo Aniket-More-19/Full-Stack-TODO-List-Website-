@@ -11,7 +11,9 @@ router.post("/", (req, res) => {
     if (err) {
       res.status(500).json({ error: err.message });
     } else {
-      res.json({ message: `Todo {} created successfully` });
+      res.json({
+        message: `Todo ${(id, todoItem, isComplete)} created successfully`,
+      });
     }
   });
 });
@@ -19,7 +21,8 @@ router.post("/", (req, res) => {
 // get all todos
 router.get("/", (req, res) => {
   const sql = "SELECT * FROM todos";
-  db.all(sql, [], (err) => {
+  db.all(sql, [], (err, rows) => {
+    console.log("rows ", rows);
     if (err) {
       res.status(500).json({ error: err.message });
     } else {

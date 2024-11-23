@@ -5,6 +5,17 @@ const db = new sqlite3.Database("todo.db", (err) => {
     console.log(err.message);
   } else {
     console.log("Connected to SQLite database");
+
+    db.run(
+      `CREATE TABLE IF NOT EXISTS todos(id INTEGER PRIMARY KEY, todoItem TEXT, isComplete BOOLEAN)`,
+      (err) => {
+        if (err) {
+          console.error(err.message);
+        } else {
+          console.log("todos table created successfully");
+        }
+      }
+    );
   }
 });
 
