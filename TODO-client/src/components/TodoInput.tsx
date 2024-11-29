@@ -10,7 +10,11 @@ export function TodoInput({ addTodo }: any) {
   }
 
   function handleAddNewTodo() {
-    addTodo({ id: Math.random(), todoItem: inputValue, isComplete: false });
+    addTodo({
+      id: Date.now(),
+      todoItem: inputValue,
+      isComplete: false,
+    });
     setInputValue("");
   }
 
