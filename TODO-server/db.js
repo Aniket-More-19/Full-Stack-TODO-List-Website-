@@ -7,7 +7,7 @@ const db = new sqlite3.Database("todo.db", (err) => {
     console.log("Connected to SQLite database");
 
     db.run(
-      `CREATE TABLE IF NOT EXISTS todos(id INTEGER PRIMARY KEY, todoItem TEXT, isComplete BOOLEAN)`,
+      `CREATE TABLE IF NOT EXISTS todos(id INTEGER PRIMARY KEY, todoItem TEXT NOT NULL , isComplete BOOLEAN NOT NULL)`,
       (err) => {
         if (err) {
           console.error(err.message);
