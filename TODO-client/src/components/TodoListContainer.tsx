@@ -11,8 +11,32 @@ function TodoListContainer() {
 
   const [checked, setChecked] = React.useState<Array<number>>([]); // array for storing checked items ids
 
-  function addTodo(newTodo: any) {
-    setTodos([...todos, newTodo]);
+  async function addTodo(newTodo: {
+    id: number;
+    todoItem: string;
+    isComplete: boolean;
+  }) {
+    console.log("new todo ", newTodo);
+
+    try {
+      let response = await fetch("http://localhost:3000/todos", {
+        method: "POST",
+        body: JSON.stringify({
+          id: newTodo.id,
+          todoItem: newTodo.todoItem,
+          isComplete: newTodo.isComplete,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      let data = await response.json();
+      console.log("data :", data);
+      setTodos([...todos, newTodo]);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
