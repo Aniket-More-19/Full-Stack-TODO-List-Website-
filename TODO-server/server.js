@@ -10,7 +10,7 @@ app.use(express.json());
 app.use("/todos", todosRouter);
 
 app.get("/", (req, res) => {
-  res.send("Hello, World!");
+  res.send("Hello, Todo server started!");
 });
 
 app.listen(port, () => {
