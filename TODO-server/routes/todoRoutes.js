@@ -30,54 +30,37 @@ router.get("/", (req, res) => {
     if (err) {
       res.status(500).json({ error: err.message });
     } else {
-      const todos = rows.map(
-        (row) => new Todo(row.id, row.todoItem, row.isComplete)
-      );
+      const todos = [...rows]
+        .slice() // create shallow copy of array without modifying original array
+        .reverse()
+        .map(
+          (row) => new Todo(row.id, row.todoItem, row.isComplete ? true : false)
+        );
       res.json(todos);
     }
   });
 });
 
-// get only active todos
-router.get("/active", (req, res) => {
-  const sql = "SELECT * FROM todos WHERE isComplete = false";
-  db.all(sql, [], (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-    } else {
-      const todos = rows.map(
-        (row) => new Todo(row.id, row.todoItem, row.isComplete)
-      );
-      res.json(todos);
-    }
-  });
-});
+// clear completed todos based on ids
+router.post("/clear-completed", (req, res) => {
+  let { completedTodoIds } = req.body;
+  let completedIds = Object.values(completedTodoIds);
+  console.log("completed todo ids \n", completedIds);
 
-// get only completed todos
-router.get("/completed", (req, res) => {
-  const sql = "SELECT * FROM todos WHERE isComplete = true";
-  db.all(sql, [], (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-    } else {
-      const todos = rows.map(
-        (row) => new Todo(row.id, row.todoItem, row.isComplete)
-      );
-      res.json(todos);
-    }
-  });
-});
-
-// clear completed todos only
-router.get("/clear-completed", (req, res) => {
-  const sql = "DELETE FROM todos WHERE isComplete = true";
-  db.all(sql, [], (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-    } else {
-      res.json({ message: "Cleared completed todos." });
-    }
-  });
+  const sql = "DELETE FROM todos WHERE id = ? ";
+  let deletedCount = 0;
+  completedIds.forEach((id, index) =>
+    db.run(sql, [id], (err) => {
+      if (err) {
+        res.status(500).json({ message: err.message });
+      } else {
+        deletedCount++;
+        if (deletedCount === completedIds.length) {
+          res.json({ message: "Deleted completed todos!" });
+        }
+      }
+    })
+  );
 });
 
 module.exports = router;

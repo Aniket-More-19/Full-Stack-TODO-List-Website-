@@ -1,7 +1,7 @@
 import TodoItemsContainer from "./TodoItemsContainer";
 import { BottomBar } from "./BottomBar";
 import { TodoInput } from "./TodoInput";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 function TodoListContainer() {
   const [todos, setTodos] = useState<Array<object>>([]);
@@ -11,6 +11,29 @@ function TodoListContainer() {
 
   const [checked, setChecked] = React.useState<Array<number>>([]); // array for storing checked items ids
 
+  useEffect(() => {
+    getAllTodos();
+  }, []);
+
+  console.log("todos in parent \n", todos);
+  console.log("checked \n", checked);
+
+  // get all todos
+  async function getAllTodos() {
+    console.log("get all api called");
+    try {
+      fetch("http://localhost:3000/todos")
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("All Todos : \n", data);
+          setTodos(data);
+        });
+    } catch (error) {
+      console.error("Error retriving all todos :", error);
+    }
+  }
+
+  // add new todo
   async function addTodo(newTodo: {
     id: number;
     todoItem: string;
@@ -33,7 +56,7 @@ function TodoListContainer() {
 
       let data = await response.json();
       console.log("data :", data);
-      setTodos([...todos, newTodo]);
+      setTodos([newTodo, ...todos]);
     } catch (error) {
       console.error(error);
     }
@@ -66,6 +89,7 @@ function TodoListContainer() {
           setFilterValue={setFilterValue}
           checked={checked}
           setChecked={setChecked}
+          getAllTodos={getAllTodos}
         ></BottomBar>
       </div>
     </div>

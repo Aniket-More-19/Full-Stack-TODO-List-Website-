@@ -34,8 +34,6 @@ export function TodoItemsContainer({
     }
   }, [filterValue, todos]);
 
-  console.log("todos", todos);
-
   function handleToggle(todo: {
     id: number;
     todoItem: string;
