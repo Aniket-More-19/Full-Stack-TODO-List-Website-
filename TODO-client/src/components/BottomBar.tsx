@@ -5,24 +5,34 @@ export function BottomBar({
   setFilterValue,
   checked,
   setChecked,
+  getAllTodos,
 }: any) {
   function handleFilterValue(value: string) {
     setFilterValue(value);
   }
 
-  function handleClearCompleted() {
-    let updatedTodos = todos.filter((todo: any) => !todo.isComplete);
-    let updatedTodoItems = updatedTodos.map((todo: any) => todo.todoItem);
-
-    let newChecked = checked.filter((todoItem: string) =>
-      updatedTodoItems.includes(todoItem)
-    );
-
-    setChecked(newChecked);
-    setTodos(updatedTodos);
-    setFilterValue("All");
+  async function handleClearCompleted() {
+    try {
+      fetch("http://localhost:3000/todos/clear-completed", {
+        method: "POST",
+        body: JSON.stringify({
+          completedTodoIds: checked,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((msg) => {
+          console.log("Clear completed \n", msg);
+          setChecked([]); // deleted all completed/ checked todos. So, checked array will be empty now.
+          setFilterValue("All");
+          getAllTodos();
+        });
+    } catch (error) {
+      console.log("Error deleting completed todos : \n", error);
+    }
   }
-
   return (
     <>
       {/** bottom bar for desktop */}
@@ -78,7 +88,12 @@ export function BottomBar({
             }{" "}
             items left
           </h3>{" "}
-          <h3 onClick={() => handleFilterValue("Clear Completed")}>
+          <h3
+            onClick={() => {
+              handleFilterValue("Clear Completed");
+              handleClearCompleted();
+            }}
+          >
             Clear Completed
           </h3>
         </div>
